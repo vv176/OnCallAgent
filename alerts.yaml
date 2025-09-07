@@ -1,0 +1,18 @@
+groups:
+- name: inventory.error.rules
+  rules:
+  - alert: InventoryHighErrorRate
+    expr: |
+      (
+        sum(rate(http_errors_total{job="inventory"}[1m]))
+        /
+        sum(rate(http_requests_total{job="inventory"}[1m]))
+      ) > 0.2
+    for: 1m
+    labels:
+      severity: critical
+      service: inventory
+    annotations:
+      summary: "High 5xx error rate on inventory"
+      description: "Error rate > 20% over 1m"
+      runbook: "Investigate recent stack traces and /random-endpoint traffic"

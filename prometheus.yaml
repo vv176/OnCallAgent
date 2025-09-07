@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: inventory
+    file_sd_configs:
+      - files:
+          - ./inventory_targets.json   # Prometheus watches this file
+        refresh_interval: 5s
+
+rule_files:
+  - ./alerts.yaml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["localhost:9093"]
